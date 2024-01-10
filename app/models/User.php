@@ -34,9 +34,13 @@ class User {
        }
     
        public function signUp($data){
-        $this->db->query(
-            "INSERT INTO $this->tableName (`name`, email, `password`) VALUES (:name, :email, :password)"
-        );
+        $isFirstUser = $this->isFirstUser();
+
+        $query = $isFirstUser ?
+            "INSERT INTO $this->tableName (`name`, email, `password`, role) VALUES (:name, :email, :password, TRUE)" :
+            "INSERT INTO $this->tableName (`name`, email, `password`) VALUES (:name, :email, :password)";
+    
+        $this->db->query($query);
     //    bind values
         $this->db->bind(':name', $data['name']);
         $this->db->bind(':email', $data['email']);
@@ -48,16 +52,26 @@ class User {
                 return false;
                }
        }
+       private function isFirstUser() {
+        // Check if the user table is empty
+        $this->db->query("SELECT COUNT(*) as count FROM $this->tableName");
+        $result = $this->db->single();
+     
+        return $result->count == 0;
+    }
    
        private function createTable() {
            // Define your table creation SQL here
            $createTableSQL = "
+           
            CREATE TABLE $this->tableName (
-                userId INT PRIMARY KEY AUTO_INCREMENT,
-                name VARCHAR(255) NOT NULL,
-                email VARCHAR(255) NOT NULL,
-                password VARCHAR(255) NOT NULL);        
-           ";
+               userId INT PRIMARY KEY AUTO_INCREMENT,
+               name VARCHAR(255) NOT NULL,
+               email VARCHAR(255) NOT NULL,
+               password VARCHAR(255) NOT NULL,
+               role BOOL NOT NULL DEFAULT FALSE
+           );       
+       ";
            
            // Execute the table creation query
            $this->db->query($createTableSQL);
@@ -109,18 +123,7 @@ class User {
           }
 
     }
-    public function updateuser($data){
-        $this->db->query("UPDATE $this->tableName SET `name`=:name,`email`=:email WHERE userId=:userId ");
-           $this->db->bind(':name', $data['name']);
-            $this->db->bind(':email', $data['email']);
-            $this->db->bind(':userId', $data['userId']);
-            if($this->db->execute()){
-                return true;
-              } else {
-                return false;
-              }
-    
-    }
+   
 
    
 }

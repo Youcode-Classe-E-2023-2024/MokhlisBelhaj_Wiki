@@ -9,6 +9,7 @@ class Router
     {
         
         $urlData = $this->getUrl();
+       
    
        
         
@@ -20,7 +21,7 @@ class Router
         } 
   
         
-        
+       
        
         
         
@@ -30,7 +31,11 @@ class Router
             require_once('../app/controllers/' . $currentController . '.php');
             
             $this->currentController = new $currentController;
+            if( empty($urlData['method'])){
+                $urlData['method']  = 'index';
+            }
             if(method_exists($this->currentController, $urlData['method'])){
+               
                 $this->currentMethod = $urlData['method'];
               }
         } else {

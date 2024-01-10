@@ -72,11 +72,19 @@ class Authentication extends Controller{
         $_SESSION['user_id'] = $user->userId;
         $_SESSION['email'] = $user->email;
         $_SESSION['name'] = $user->name;
+        if ($user->role){
+        $_SESSION['role'] = 'admin';
+        $_SESSION['url'] = 'admin/index';
+        }else{
+            $_SESSION['role'] = 'auteurs';  
+            $_SESSION['url'] = '';
+        }
        
 
 
         http_response_code(200);
-
+        echo(json_encode($_SESSION));
+      
         // Send the JSON response
         
         exit;
@@ -86,6 +94,8 @@ class Authentication extends Controller{
         unset($_SESSION['user_id']);
         unset($_SESSION['email']);
         unset($_SESSION['name']);
+        unset($_SESSION['role']);
+
    
         session_destroy();
         redirect('authentication/login');

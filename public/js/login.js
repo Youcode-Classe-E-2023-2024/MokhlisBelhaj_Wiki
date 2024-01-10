@@ -15,12 +15,16 @@
                 data: formData,
                 success: function (response) {
                     // Handle the success response
-                    console.log(response);
-                    window.location.href = "http://localhost/MokhlisBelhaj_Wiki/";
-
-                    // You can redirect or perform other actions based on the response
-                },
-                error: function (error) {
+                    // console.log(response);
+                    data = JSON.parse(response);
+                    console.log(data);
+                    var url = "http://localhost/MokhlisBelhaj_Wiki/"+data.url
+                       if( confirm('hello')){
+                            window.location.href = url ;
+                   }
+                // You can redirect or perform other actions based on the response
+            },
+            error: function (error) {
                     // Handle the error response
                     // console.log(error);
                     data = error.responseJSON;
