@@ -19,9 +19,9 @@
                     data = JSON.parse(response);
                     console.log(data);
                     var url = "http://localhost/MokhlisBelhaj_Wiki/"+data.url
-                       if( confirm('hello')){
+                    
                             window.location.href = url ;
-                   }
+            
                 // You can redirect or perform other actions based on the response
             },
             error: function (error) {
