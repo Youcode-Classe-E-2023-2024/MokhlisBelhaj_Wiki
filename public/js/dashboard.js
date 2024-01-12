@@ -44,21 +44,20 @@ function closeModal() {
     $("#CategoryModal").addClass("hidden");
 }
 
-function createProject() {
-    var formData = $(".project-form").serializeArray();
+function createCategory() {
+    var formData = $(".project-form").serialize();
     console.log(formData['0'].value);
 
     if (formData['0'].value == "") {
         alert("Please fill the input.");
         return;
     }
-
     $.ajax({
-        url: 'https://jsonplaceholder.typicode.com/posts',
+        url: 'http://localhost/MokhlisBelhaj_Wiki/admin/addCategory',
         type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(formData),
+        data: formData,
         success: function(data) {
+            console.log(data);
             alert('Category created successfully.');
             closeModal(); // Optionally close the modal after successful submission
         },
@@ -69,6 +68,69 @@ function createProject() {
 }
 
 $("#addNewCATEGORY").on("click", openModal);
+
+// _____________________________getCategory________________________
+$(document).ready(function(){
+    $.ajax({
+        url: 'http://localhost/MokhlisBelhaj_Wiki/admin/allCategory',
+        type: 'GET',
+        dataType: 'json', // Change this based on the expected response type
+        success: function(data) {
+            var tbody = $('#Categorytable');
+
+
+// Clear existing content
+tbody.empty();
+
+// Iterate through the data and append rows to the tbody
+$.each(data, function(index, item) {
+    var row = '<tr>';
+    row += '<td>' + item.name + '</td>';
+    row += '<td>' + item.create_at + '</td>';
+    row += '<td>' + item.edit_at + '</td>';
+    row += '<td>';
+    row += '<div class="flex justify-evenly gap-1">';
+    row += '<i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i>';
+    // row += '<i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i>';
+    row += ' <button class="category-delete-link text-red-500 hover:text-red-600"><input type="hidden" value="'+item.idCategory+'" class="inputDelete"><i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i></button>';
+   
+    row += '</div>';
+    row += '</td>';
+    row += '</tr>';
+    tbody.append(row);
+});
+        },
+        error: function(error) {
+            // Handle any errors that occur during the request
+            console.error('Error fetching data:', error);
+        }
+    });
+});
+// __________________________________________categorydelete________________________________________
+$(document).on('click', '.category-delete-link', function(event) {
+    event.preventDefault(); // Prevent the default behavior of the link
+
+    var deleteUrl = "http://localhost/MokhlisBelhaj_Wiki/admin/deleteCategory/"+$('.inputDelete', $(this).parent()).val();
+    console.log(deleteUrl);
+ 
+    // Confirm with the user before sending the delete request
+    if (confirm('Are you sure you want to delete this category?')) {
+        $.ajax({
+            url: deleteUrl,
+            method: 'DELETE', // Adjust the HTTP method based on your API requirements
+            success: function() {
+                $(event.target).closest('tr').remove();
+
+                // Show a success alert
+                alert('category deleted successfully!');
+            },
+            error: function(error) {
+                console.log('Error deleting post: ', error);
+            }
+        });
+    }
+});
+
 // ------------------------------------------TagModal---------------
 function opentagModal() {
     $("#TagModal").removeClass("hidden");
@@ -82,18 +144,19 @@ function createtag() {
     console.log(formData);
 
     if (formData['0'].value == "") {
-        alert("Please fill the input .");
+        alert("Please fill the input hna .");
         return;
     }
 
+    
     $.ajax({
-        url: 'https://jsonplaceholder.typicode.com/posts',
+        url: 'http://localhost/MokhlisBelhaj_Wiki/admin/addtags',
         type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(formData),
+        data: formData,
         success: function(data) {
-            alert('Category created successfully.');
-            closeModal(); // Optionally close the modal after successful submission
+            console.log(data);
+            alert('tags created successfully.');
+            closetagModal(); // Optionally close the modal after successful submission
         },
         error: function(jqXHR, textStatus, errorThrown) {
             alert('Error creating projects: ' + errorThrown);
@@ -101,3 +164,81 @@ function createtag() {
     });
 }
 $("#addNewTag").on("click",opentagModal );
+// _____________________________getTags________________________
+$(document).ready(function(){
+    $.ajax({
+        url: 'http://localhost/MokhlisBelhaj_Wiki/admin/alltags/',
+        type: 'GET',
+        dataType: 'json', // Change this based on the expected response type
+        success: function(data) {
+            console.log(data);
+
+            // Handle the successful response here
+            var tbody = $('#tagtable');
+
+// Clear existing content
+tbody.empty();
+
+// Iterate through the data and append rows to the tbody
+$.each(data, function(index, item) {
+    var row = '<tr>';
+    row += '<td>' + item.name + '</td>';
+    row += '<td>' + item.create_at + '</td>';
+    row += '<td>' + item.edit_at + '</td>';
+    row += '<td>';
+    row += '<div class="flex justify-evenly  gap-1">';
+    row += '<i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i>';
+    row += ' <button class="tag-delete-link text-red-500 hover:text-red-600"><input type="hidden" value="'+item.idtag+'" class="inputDelete"><i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i></button>';
+    row += '</div>';
+    row += '</td>';
+    row += '</tr>';
+    tbody.append(row);
+});
+        },
+        error: function(error) {
+            // Handle any errors that occur during the request
+            console.error('Error fetching data:', error);
+        }
+    });
+});
+// __________________________________________tagdelete________________________________________
+$(document).on('click', '.tag-delete-link', function(event) {
+    event.preventDefault(); // Prevent the default behavior of the link
+
+    var deleteUrl = "http://localhost/MokhlisBelhaj_Wiki/admin/deletetag/"+$('.inputDelete', $(this).parent()).val();
+    console.log(deleteUrl);
+ 
+    // Confirm with the user before sending the delete request
+    if (confirm('Are you sure you want to delete this tag?')) {
+        $.ajax({
+            url: deleteUrl,
+            method: 'DELETE', // Adjust the HTTP method based on your API requirements
+            success: function() {
+                $(event.target).closest('tr').remove();
+
+                // Show a success alert
+                alert('tag deleted successfully!');
+            },
+            error: function(error) {
+                console.log('Error deleting post: ', error);
+            }
+        });
+    }
+});
+
+// ---------------------users --------------------
+// $(document).ready(function(){
+//     $.ajax({
+//         url: 'http://localhost/MokhlisBelhaj_Wiki/admin/allUsers/',
+//         type: 'GET',
+//         dataType: 'json', // Change this based on the expected response type
+//         success: function(data) {
+//             // Handle the successful response here
+//             console.log(data);
+//         },
+//         error: function(error) {
+//             // Handle any errors that occur during the request
+//             console.error('Error fetching data:', error);
+//         }
+//     });
+// });

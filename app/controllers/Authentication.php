@@ -69,6 +69,8 @@ class Authentication extends Controller{
     }
     public function createUserSession($user)
     {
+       
+         
         $_SESSION['user_id'] = $user->userId;
         $_SESSION['email'] = $user->email;
         $_SESSION['name'] = $user->name;

@@ -92,7 +92,7 @@ class User {
 
     public function getUser() {
         try {
-            $this->db->query("SELECT * FROM " . $this->tableName . " WHERE userId <> :userId");
+            $this->db->query("SELECT email,name FROM " . $this->tableName . " WHERE userId <> :userId");
             $this->db->bind(':userId', $_SESSION["user_id"]);
            
             $result = $this->db->resultSet();

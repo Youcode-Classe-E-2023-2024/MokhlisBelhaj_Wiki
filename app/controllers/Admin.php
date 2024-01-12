@@ -3,6 +3,7 @@ class Admin extends Controller
 {
     private $tagmodel;
     private $Categorymodel;
+    private $Usermodel;
     public function __construct()
     {
         // if($_SESSION['role'] != 'admin'){
@@ -10,10 +11,16 @@ class Admin extends Controller
         // }
         $this->tagmodel = $this->model('Tag');
         $this->Categorymodel = $this->model('Category');
+        $this->Usermodel = $this->model('User');
     }
     public function index()
     {
         $this->view('admin/index');
+    }
+    public function allUsers(){
+        $users = $this->Usermodel->getUser();
+        echo json_encode($users);
+
     }
     // -----------------------CRUD Category --------------------
     public function allcategory()
@@ -23,15 +30,24 @@ class Admin extends Controller
     }
     public function addCategory()
     {
+        
         $data = [
             "name" => $_POST['name']
         ];
-        $Category = $this->Categorymodel->insetCategory($data);
-        if ($Category) {
-            http_response_code(201);
-        } else {
+        $validation = $this->Categorymodel->uniqueName($data["name"]);
+       
+        if(!$validation){
+            $Category = $this->Categorymodel->insetCategory($data);
+            if ($Category) {
+                http_response_code(201);
+            } else {
+                http_response_code(400);
+            }
+        }else{
             http_response_code(400);
+            echo json_encode("this category is alread existe");
         }
+     
     }
     public function updateCategory()
     {
@@ -68,15 +84,23 @@ class Admin extends Controller
     }
     public function addtags()
     {
+        
         $data = [
-            "name" => $_POST['name']
+            "name" => $_POST["tagname"]
         ];
-        $tag = $this->tagmodel->insetTag($data);
+        $validation = $this->tagmodel->uniqueName($data["name"]);
+        if(!$validation){
+            $tag = $this->tagmodel->insetTag($data);
         if ($tag) {
             http_response_code(201);
         } else {
             http_response_code(400);
         }
+        }else{
+            http_response_code(400);
+            echo json_encode("this tag is alread existe");
+        }
+       
     }
     public function updateTag()
     {

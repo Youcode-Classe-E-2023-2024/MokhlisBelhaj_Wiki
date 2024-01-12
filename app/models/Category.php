@@ -42,6 +42,16 @@ class Category {
         $result = $this->db->resultSet();
         return $result;
     }
+    public function uniqueName($name){
+        $this->db->query("select * from $this->tableName where name = :name");
+        $this->db->bind(':name', $name);
+        $row =$this->db->single();
+        if( $this->db->rowcount() >0 ){
+            return true;
+        }else{
+             return false;
+        }
+    }
     public function insetCategory($data){
         $this->db->query("INSERT INTO $this->tableName ( `name`) VALUES (:name)");
         $this->db->bind(':name', $data['name']);

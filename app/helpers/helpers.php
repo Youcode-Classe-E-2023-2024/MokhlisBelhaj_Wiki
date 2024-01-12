@@ -11,3 +11,17 @@ function isLoggedIn(){
     header('Location:'.URLROOT.$page);
 
 }
+/** 
+ * 
+ * @param mixed $var
+ * @return void
+ * 
+ * 
+*/
+
+function debug($var){
+    echo "<pre>";
+    print_r($var);
+    echo "</pre>";
+    die();
+}

@@ -108,7 +108,7 @@
                             <th class="text-center">edit_at</th>
                             <th class="text-center">author</th>
                             <th class="text-center">Status</th>
-                            <th class="text-center">Actions</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
 
@@ -120,7 +120,8 @@
                             <td>2023-11-29 15:28:45</td>
                             <td>2023-11-29 15:28:45</td>
                             <td>author</td>
-                            <td><span class="bg-green-50 text-green-700 px-3 py-1 ring-1 ring-green-200 text-xs rounded-md">Active</span>
+                            <td>
+                                <span class="bg-green-50 text-green-700 px-3 py-1 ring-1 ring-green-200 text-xs rounded-md">Active</span>
                             </td>
                             <td>
                                 <div class="flex justify-between gap-1">
@@ -129,6 +130,7 @@
                                     <i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i>
                                 </div>
                             </td>
+
                         </tr>
 
 
@@ -162,7 +164,7 @@
                         </tr>
                     </thead>
 
-                    <tbody class=" bg-white">
+                    <tbody id="Categorytable" class=" bg-white">
                         <tr>
                             <td>Rabiul Islam</td>
                             <td>2023-11-29 15:28:45</td>
@@ -205,19 +207,8 @@
                         </tr>
                     </thead>
 
-                    <tbody class=" bg-white">
-                        <tr>
-                            <td>Rabiul Islam</td>
-                            <td>2023-11-29 15:28:45</td>
-                            <td>2023-11-29 15:28:45</td>
-                            <td>
-                                <div class="flex justify-between gap-1">
-                                    <i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i>
-                                    <i title="View" class="fa-solid fa-eye p-1 text-violet-500 rounded-full cursor-pointer"></i>
-                                    <i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i>
-                                </div>
-                            </td>
-                        </tr>
+                    <tbody id="tagtable" class=" bg-white">
+
 
 
                     </tbody>
@@ -249,11 +240,11 @@
             </form>
 
             <div class="flex justify-end">
-                <button class="bg-gradient-to-r from-violet-300 to-indigo-300 hover:from-violet-900 hover:to-indigo-900 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md mr-2" onclick="createProject()">Create</button>
+                <button class="bg-gradient-to-r from-violet-300 to-indigo-300 hover:from-violet-900 hover:to-indigo-900 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md mr-2" onclick="createCategory()">Create</button>
                 <button class="bg-gradient-to-r from-gray-100 to-slate-200 hover:from-gray-200 hover:to-slate-300 border border-fuchsia-00 hover:border-violet-100 text-gray-800 font-semibold py-2 px-4 rounded-md transition-colors duration-300" onclick="closeModal()">Cancel</button>
             </div>
         </div>
-     </div>
+    </div>
     </div>
     <div id="TagModal" class="hidden fixed inset-0 z-10 overflow-y-auto   backdrop-blur-lg flex items-center justify-center transition-transform duration-300">
         <div class="modal-container overflow-y-auto h-fit p-6 backdrop-blur-sm bg-white/90 w-11/12 sm:w-11/12 md:w-8/12 lg:w-6/12 rounded-md shadow-sm">
@@ -265,7 +256,7 @@
                             <div class="w-full px-3">
                                 <div class="mb-5">
                                     <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">
-                                        name 
+                                        name
                                     </label>
                                     <input type="text" name="tagname" placeholder="name" class="w-full h-14 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
                                 </div>
@@ -276,22 +267,24 @@
                 </div>
             </form>
 
-            <div class="flex justify-end">
+            <div class="flex justify-end ">
                 <button class="bg-gradient-to-r from-violet-300 to-indigo-300 hover:from-violet-900 hover:to-indigo-900 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md mr-2" onclick="createtag()">Create</button>
                 <button class="bg-gradient-to-r from-gray-100 to-slate-200 hover:from-gray-200 hover:to-slate-300 border border-fuchsia-00 hover:border-violet-100 text-gray-800 font-semibold py-2 px-4 rounded-md transition-colors duration-300" onclick="closetagModal()">Cancel</button>
             </div>
         </div>
-     </div>
     </div>
- 
-    
-    
+    </div>
+
+
+
     <footer class="bg-black p-5 bottom-0 fixed w-full">
         <p class="text-center text-white">Copyright @2024</p>
     </footer>
-    
-    
+
+
     <script src="<?= URLROOT; ?>js\dashboard.js"> </script>
+    <script>
+    </script>
 </body>
 
 </html>
