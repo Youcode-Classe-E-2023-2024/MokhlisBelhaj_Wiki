@@ -45,9 +45,7 @@ function closeModal() {
 }
 
 function createCategory() {
-    var formData = $(".project-form").serialize();
-    console.log(formData['0'].value);
-
+    var formData = $(".Category-form").serialize();
     if (formData['0'].value == "") {
         alert("Please fill the input.");
         return;
@@ -56,12 +54,12 @@ function createCategory() {
         url: 'http://localhost/MokhlisBelhaj_Wiki/admin/addCategory',
         type: 'POST',
         data: formData,
-        success: function(data) {
+        success: function (data) {
             console.log(data);
             alert('Category created successfully.');
             closeModal(); // Optionally close the modal after successful submission
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             alert('Error creating projects: ' + errorThrown);
         }
     });
@@ -70,61 +68,113 @@ function createCategory() {
 $("#addNewCATEGORY").on("click", openModal);
 
 // _____________________________getCategory________________________
-$(document).ready(function(){
+function getCategory(){
     $.ajax({
         url: 'http://localhost/MokhlisBelhaj_Wiki/admin/allCategory',
         type: 'GET',
         dataType: 'json', // Change this based on the expected response type
-        success: function(data) {
+        success: function (data) {
             var tbody = $('#Categorytable');
 
 
-// Clear existing content
-tbody.empty();
+            // Clear existing content
+            tbody.empty();
 
-// Iterate through the data and append rows to the tbody
-$.each(data, function(index, item) {
-    var row = '<tr>';
-    row += '<td>' + item.name + '</td>';
-    row += '<td>' + item.create_at + '</td>';
-    row += '<td>' + item.edit_at + '</td>';
-    row += '<td>';
-    row += '<div class="flex justify-evenly gap-1">';
-    row += '<i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i>';
-    // row += '<i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i>';
-    row += ' <button class="category-delete-link text-red-500 hover:text-red-600"><input type="hidden" value="'+item.idCategory+'" class="inputDelete"><i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i></button>';
-   
-    row += '</div>';
-    row += '</td>';
-    row += '</tr>';
-    tbody.append(row);
-});
+            // Iterate through the data and append rows to the tbody
+            $.each(data, function (index, item) {
+                var row = '<tr>';
+                row += '<td>' + item.name + '</td>';
+                row += '<td>' + item.create_at + '</td>';
+                row += '<td>' + item.edit_at + '</td>';
+                row += '<td>';
+                row += '<div class="flex justify-evenly gap-1">';
+                row += '<button class="Category-edite text-blue-500 hover:text-blue-600"><input type="hidden" value="' + item.idCategory + '" class="editeCategory"><i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i></button>';
+                row += ' <button class="category-delete-link text-red-500 hover:text-red-600"><input type="hidden" value="' + item.idCategory + '" class="inputDelete"><i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i></button>';
+                row += '</div>';
+                row += '</td>';
+                row += '</tr>';
+                tbody.append(row);
+            });
         },
-        error: function(error) {
+        error: function (error) {
             // Handle any errors that occur during the request
             console.error('Error fetching data:', error);
         }
     });
+}
+$(document).ready(function () {
+    getCategory();
 });
+// __________________________________________editCategory__________________________________
+$(document).on("click", ".Category-edite", openCategoryEditModal);
+
+function openCategoryEditModal() {
+    // Open the modal
+
+    var editid = $('.editeCategory', $(this).parent()).val()
+    console.log(editid);
+    $.ajax({
+        url: 'http://localhost/MokhlisBelhaj_Wiki/admin/getCategoriesId/' + editid,
+        method: 'get',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            $('#nameupdateCategory').val(data[0].name);
+            $('#editeCategoryrid').val(data[0].idCategory);
+        },
+        error: function (error) {
+            console.log('Error fetching data: ', error);
+        }
+    })
+    $('#editCategoryModal').removeClass('hidden');
+}
+function closeCategoryEditeModal() {
+    $('#editCategoryModal').addClass('hidden');
+
+}
+function editeCategory() {
+    console.log('hna',$('#editeTagrCategory').val());
+
+    $.ajax({
+        url: `http://localhost/MokhlisBelhaj_Wiki/admin/updateCategory`,
+        method: 'post',
+        dataType: 'json',
+        data: {
+            "name": $('#nameupdateCategory').val(),
+            "idCategory": $('#editeCategoryrid').val()
+        },
+
+        success: function (data) {
+            alert(' updated Category successfully');
+            getCategory();
+            $('#editCategoryModal').addClass('hidden');
+        },
+        error: function (error) {
+            alert(' Category not updated ');
+        }
+    })
+
+}
 // __________________________________________categorydelete________________________________________
-$(document).on('click', '.category-delete-link', function(event) {
+$(document).on('click', '.category-delete-link', function (event) {
     event.preventDefault(); // Prevent the default behavior of the link
 
-    var deleteUrl = "http://localhost/MokhlisBelhaj_Wiki/admin/deleteCategory/"+$('.inputDelete', $(this).parent()).val();
+    var deleteUrl = "http://localhost/MokhlisBelhaj_Wiki/admin/deleteCategory/" + $('.inputDelete', $(this).parent()).val();
     console.log(deleteUrl);
- 
+
     // Confirm with the user before sending the delete request
     if (confirm('Are you sure you want to delete this category?')) {
         $.ajax({
             url: deleteUrl,
             method: 'DELETE', // Adjust the HTTP method based on your API requirements
-            success: function() {
+            success: function () {
                 $(event.target).closest('tr').remove();
 
                 // Show a success alert
                 alert('category deleted successfully!');
+                getCategory();
             },
-            error: function(error) {
+            error: function (error) {
                 console.log('Error deleting post: ', error);
             }
         });
@@ -148,78 +198,131 @@ function createtag() {
         return;
     }
 
-    
+
     $.ajax({
         url: 'http://localhost/MokhlisBelhaj_Wiki/admin/addtags',
         type: 'POST',
         data: formData,
-        success: function(data) {
+        success: function (data) {
             console.log(data);
-            alert('tags created successfully.');
+            alert('tag created successfully.');
+            getTag();
             closetagModal(); // Optionally close the modal after successful submission
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             alert('Error creating projects: ' + errorThrown);
         }
     });
 }
-$("#addNewTag").on("click",opentagModal );
-// _____________________________getTags________________________
-$(document).ready(function(){
+
+function getTag() {
     $.ajax({
         url: 'http://localhost/MokhlisBelhaj_Wiki/admin/alltags/',
         type: 'GET',
         dataType: 'json', // Change this based on the expected response type
-        success: function(data) {
+        success: function (data) {
             console.log(data);
 
             // Handle the successful response here
             var tbody = $('#tagtable');
 
-// Clear existing content
-tbody.empty();
+            tbody.empty();
 
-// Iterate through the data and append rows to the tbody
-$.each(data, function(index, item) {
-    var row = '<tr>';
-    row += '<td>' + item.name + '</td>';
-    row += '<td>' + item.create_at + '</td>';
-    row += '<td>' + item.edit_at + '</td>';
-    row += '<td>';
-    row += '<div class="flex justify-evenly  gap-1">';
-    row += '<i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i>';
-    row += ' <button class="tag-delete-link text-red-500 hover:text-red-600"><input type="hidden" value="'+item.idtag+'" class="inputDelete"><i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i></button>';
-    row += '</div>';
-    row += '</td>';
-    row += '</tr>';
-    tbody.append(row);
-});
+            $.each(data, function (index, item) {
+
+                var row = '<tr>';
+                row += '<td>' + item.name + '</td>';
+                row += '<td>' + item.create_at + '</td>';
+                row += '<td>' + item.edit_at + '</td>';
+                row += '<td>';
+                row += '<div class="flex justify-evenly  gap-1">';
+                row += '<button class="tag-edite text-blue-500 hover:text-blue-600"><input type="hidden" value="' + item.idtag + '" class="editetag"><i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i></button>';
+                row += '<button class="tag-delete-link text-red-500 hover:text-red-600"><input type="hidden" value="' + item.idtag + '" class="inputDelete"><i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i></button>';
+                row += '</div>';
+                row += '</td>';
+                row += '</tr>';
+                tbody.append(row);
+            });
         },
-        error: function(error) {
+        error: function (error) {
             // Handle any errors that occur during the request
             console.error('Error fetching data:', error);
         }
     });
+}
+$("#addNewTag").on("click", opentagModal);
+// _____________________________getTags________________________
+$(document).ready(function () {
+    getTag();
 });
+// __________________________________________editTag__________________________________
+$(document).on("click", ".tag-edite", openTagEditModal);
+
+function openTagEditModal() {
+    // Open the modal
+
+    var editid = $('.editetag', $(this).parent()).val()
+    $.ajax({
+        url: 'http://localhost/MokhlisBelhaj_Wiki/admin/getTagId/' + editid,
+        method: 'get',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            $('#nameupdatetag').val(data[0].name);
+            $('#editeTagrid').val(data[0].idtag);
+        },
+        error: function (error) {
+            console.log('Error fetching data: ', error);
+        }
+    })
+    $('#editTagModal').removeClass('hidden');
+}
+function closeTagEditeModal() {
+    $('#editTagModal').addClass('hidden');
+
+}
+function editeTag() {
+
+    $.ajax({
+        url: `http://localhost/MokhlisBelhaj_Wiki/admin/updateTag`,
+        method: 'post',
+        dataType: 'json',
+        data: {
+            "name": $('#nameupdatetag').val(),
+            "idtag": $('#editeTagrid').val()
+        },
+
+        success: function (data) {
+            alert(' updated tag successfully');
+            getTag();
+            $('#editTagModal').addClass('hidden');
+        },
+        error: function (error) {
+            alert(' njgiojiogu errorere tag');
+            console.error(error);
+        }
+    })
+
+}
+
 // __________________________________________tagdelete________________________________________
-$(document).on('click', '.tag-delete-link', function(event) {
+$(document).on('click', '.tag-delete-link', function (event) {
     event.preventDefault(); // Prevent the default behavior of the link
 
-    var deleteUrl = "http://localhost/MokhlisBelhaj_Wiki/admin/deletetag/"+$('.inputDelete', $(this).parent()).val();
+    var deleteUrl = "http://localhost/MokhlisBelhaj_Wiki/admin/deletetag/" + $('.inputDelete', $(this).parent()).val();
     console.log(deleteUrl);
- 
+
     // Confirm with the user before sending the delete request
     if (confirm('Are you sure you want to delete this tag?')) {
         $.ajax({
             url: deleteUrl,
             method: 'DELETE', // Adjust the HTTP method based on your API requirements
-            success: function() {
-                $(event.target).closest('tr').remove();
-
+            success: function () {
+                getTag();
                 // Show a success alert
                 alert('tag deleted successfully!');
             },
-            error: function(error) {
+            error: function (error) {
                 console.log('Error deleting post: ', error);
             }
         });

@@ -49,6 +49,12 @@ class Admin extends Controller
         }
      
     }
+    public function getCategoriesId($id){
+        $data=['idCategory'=>$id];
+    $Category = $this->Categorymodel->getCategoryById($data);
+    echo json_encode($Category);
+
+    }
     public function updateCategory()
     {
         $data = [
@@ -56,8 +62,10 @@ class Admin extends Controller
             "name" => $_POST['name']
         ];
         $Category = $this->Categorymodel->updatCategory($data);
+       
         if ($Category) {
-            http_response_code(201);
+            http_response_code(200);
+            echo json_encode($Category);
         } else {
             http_response_code(400);
         }
@@ -68,8 +76,9 @@ class Admin extends Controller
             "idCategory" => $id,
         ];
         $Category = $this->Categorymodel->deleteCategory($data);
+        
         if ($Category) {
-            http_response_code(201);
+            http_response_code(200);
         } else {
             http_response_code(400);
         }
@@ -77,10 +86,18 @@ class Admin extends Controller
 
 
     // ------------------CRUD Tag --------------------------------
+    
     public function alltags()
     {
         $tag = $this->tagmodel->getallTag();
         echo json_encode($tag);
+    }
+    public function getTagId($id){
+        
+        $data=['idtag'=>$id];
+    $Tag = $this->tagmodel->getTagById($data);
+    echo json_encode($Tag);
+
     }
     public function addtags()
     {
@@ -109,8 +126,9 @@ class Admin extends Controller
             "name" => $_POST['name']
         ];
         $tag = $this->tagmodel->updatTag($data);
-        if ($tag) {
+          if ($tag) {
             http_response_code(201);
+            echo json_encode($tag);
         } else {
             http_response_code(400);
         }

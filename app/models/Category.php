@@ -37,7 +37,7 @@ class Category {
         return $result;
     }
     public function getCategoryById($data){
-        $this->db->query(" SELECT `name` FROM $this->tableName where `idCategory`=:idCategory"); 
+        $this->db->query(" SELECT * FROM $this->tableName where `idCategory`=:idCategory"); 
         $this->db->bind(':idCategory', $data['idCategory']);      
         $result = $this->db->resultSet();
         return $result;

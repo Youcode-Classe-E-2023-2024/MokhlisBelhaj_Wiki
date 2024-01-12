@@ -36,10 +36,15 @@ class Tag {
         $result = $this->db->resultSet();
         return $result;
     }
+    
     public function getTagById($data){
-        $this->db->query(" SELECT `name` FROM $this->tableName where `idtag`=:idTag"); 
+      
+
+        $this->db->query(" SELECT * FROM $this->tableName where `idtag`=:idtag"); 
         $this->db->bind(':idtag', $data['idtag']);      
         $result = $this->db->resultSet();
+        print_r(json_encode($result));
+        die();
         return $result;
     }
    

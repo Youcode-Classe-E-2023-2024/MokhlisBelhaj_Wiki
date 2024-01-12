@@ -221,7 +221,7 @@
     <div id="CategoryModal" class="hidden fixed inset-0 z-10 overflow-y-auto   backdrop-blur-lg flex items-center justify-center transition-transform duration-300">
         <div class="modal-container overflow-y-auto h-fit p-6 backdrop-blur-sm bg-white/90 w-11/12 sm:w-11/12 md:w-8/12 lg:w-6/12 rounded-md shadow-sm">
             <h2 class="text-2xl font-semibold mb-6">Create New Category</h2>
-            <form action="" class="project-form">
+            <form action="" class="Category-form">
                 <div class="flex items-center justify-center p-12">
                     <div id="newinp" class="mx-auto w-full max-w-[550px]">
                         <div class="mx-3">
@@ -273,6 +273,65 @@
             </div>
         </div>
     </div>
+    </div>
+    <div id="editTagModal" class="  float-left hidden fixed inset-0 z-10 backdrop-blur-lg flex items-center justify-center transition-transform duration-300">
+        <div class="modal-container p-6 backdrop-blur-sm bg-white/90 w-11/12 sm:w-11/12 md:w-8/12 lg:w-6/12 rounded-md shadow-sm">
+            <h2 class="text-2xl font-semibold mb-6">update tag</h2>
+            <form action="" class="project-form">
+                <div class="flex items-center justify-center p-12">
+                    <div  class="mx-auto w-full max-w-[550px]">
+                        <div class="mx-3">
+                            <div class="w-full px-3">
+                                <div class="mb-5">
+                                    <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">
+                                        name
+                                    </label>
+                                    <input type="text" name="name" id="nameupdatetag" placeholder="name" class="w-full h-14 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="id" id="editeTagrid">
+            </form>
+
+
+            <div class="flex justify-end">
+                <button class="bg-gradient-to-r from-violet-300 to-indigo-300 hover:from-violet-900 hover:to-indigo-900 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md mr-2" onclick="editeTag()">Create</button>
+                <button class="bg-gradient-to-r from-gray-100 to-slate-200 hover:from-gray-200 hover:to-slate-300 border border-fuchsia-00 hover:border-violet-100 text-gray-800 font-semibold py-2 px-4 rounded-md transition-colors duration-300" onclick="closeTagEditeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div id="editCategoryModal" class="  float-left hidden fixed inset-0 z-10 backdrop-blur-lg flex items-center justify-center transition-transform duration-300">
+        <div class="modal-container p-6 backdrop-blur-sm bg-white/90 w-11/12 sm:w-11/12 md:w-8/12 lg:w-6/12 rounded-md shadow-sm">
+            <h2 class="text-2xl font-semibold mb-6">update Category
+            </h2>
+            <form action="" class="project-form">
+                <div class="flex items-center justify-center p-12">
+                    <div  class="mx-auto w-full max-w-[550px]">
+                        <div class="mx-3">
+                            <div class="w-full px-3">
+                                <div class="mb-5">
+                                    <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">
+                                        name
+                                    </label>
+                                    <input type="text" name="name" id="nameupdateCategory" placeholder="name" class="w-full h-14 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="id" id="editeCategoryrid">
+            </form>
+
+
+            <div class="flex justify-end">
+                <button class="bg-gradient-to-r from-violet-300 to-indigo-300 hover:from-violet-900 hover:to-indigo-900 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md mr-2" onclick="editeCategory()">Create</button>
+                <button class="bg-gradient-to-r from-gray-100 to-slate-200 hover:from-gray-200 hover:to-slate-300 border border-fuchsia-00 hover:border-violet-100 text-gray-800 font-semibold py-2 px-4 rounded-md transition-colors duration-300" onclick="closeCategoryEditeModal()">Cancel</button>
+            </div>
+        </div>
     </div>
 
 
