@@ -4,6 +4,7 @@ class Admin extends Controller
     private $tagmodel;
     private $Categorymodel;
     private $Usermodel;
+    private $Articlemodel;
     public function __construct()
     {
         if($_SESSION['role'] != 'admin'){
@@ -12,6 +13,7 @@ class Admin extends Controller
         $this->tagmodel = $this->model('Tag');
         $this->Categorymodel = $this->model('Category');
         $this->Usermodel = $this->model('User');
+        $this->Articlemodel = $this->model('Article');
     }
     public function index()
     {
@@ -21,6 +23,17 @@ class Admin extends Controller
         $users = $this->Usermodel->getUser();
         echo json_encode($users);
 
+    }
+    //-------------------------articles------------------------
+    public function allarticle()
+    {
+        $Article = $this->Articlemodel->getAllArticleadmin();
+        echo json_encode($Article);
+    }
+    public function archiveArticle($id){
+       
+        $Article = $this->Articlemodel->archiveArticle($id);
+        echo json_encode($Article);
     }
     // -----------------------CRUD Category --------------------
     public function allcategory()

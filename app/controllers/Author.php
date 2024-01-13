@@ -110,4 +110,16 @@ class author extends Controller
             debug($data);
 
         } 
+        public function deleteArticle($id){
+           
+            
+            $Article = $this->Articlemodel->deleteArticle($id);
+            
+            if ($Article) {
+                http_response_code(200);
+                echo json_encode($Article);
+            } else {
+                http_response_code(400);
+            }
+        }
     }

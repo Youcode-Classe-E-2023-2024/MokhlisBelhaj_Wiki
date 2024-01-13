@@ -31,7 +31,7 @@ class Article
             `id_user`     int NOT NULL,
             `id_category` int NOT NULL,
             
-            CONSTRAINT `FK_user` FOREIGN KEY (`id_user`) REFERENCES `user` (`userId`),
+            CONSTRAINT `FK_user` FOREIGN KEY (`id_user`) REFERENCES `user` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE ,
             CONSTRAINT `FK_category` FOREIGN KEY (`id_category`) REFERENCES `category` (`idCategory`)
         );
            
@@ -59,6 +59,13 @@ class Article
 
     }
     public function getAllArticle()
+    {
+        $this->db->query("SELECT * FROM `$this->tableName` where status='published' and id_user=:id  ");
+        $this->db->bind(':id',$_SESSION['user_id']);
+        $result = $this->db->resultSet();
+        return $result;
+    }
+    public function getAllArticleadmin()
     {
         $this->db->query("SELECT * FROM `$this->tableName` ");
         $result = $this->db->resultSet();
@@ -101,14 +108,15 @@ class Article
        
     }
     public function insertTagArticle($data){
-        $this->db->query("INSERT INTO `articles_tags` (`id_article`,`id_tag`) VALUES( :id_articles ,:id_tag)  ");
+        $this->db->query("INSERT INTO `articles_tags` (`id_article`,`id_tag`) VALUES( :id_articles ,:id_tag)");
         $this->db->bind(':id_articles', $data['id_articles']);
         $this->db->bind(':id_tag', $data['id_tag']); 
         $this->db->execute();   
     }
     public function archiveArticle($id)
     {
-        $this->db->query("UPDATE `$this->tableName` SET `status`='archived' WHERE id=:id ");
+      
+        $this->db->query("UPDATE `$this->tableName` SET `status`='archived' WHERE `id`=:id ");
         $this->db->bind(':id', $id);
         if ($this->db->execute()) {
             return true;

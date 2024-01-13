@@ -96,46 +96,28 @@
 
             <div class="grid grid-cols-1 p-4 bg-gray-50 overflow-x-auto gab-3 border border-gray-100 rounded-lg mb-2">
                 <div>
-                    <span class="text-2xl font-bold uppercase">users</span>
+                    <span class="text-2xl font-bold uppercase">Article</span>
                 </div>
                 <table class="w-full text-center">
-                    <thead class="bg-gray-100 rounded-sm">
-                        <tr>
-                            <th class="text-center">title</th>
-                            <th class="text-center">content</th>
-                            <th class="text-center">category</th>
-                            <th class="text-center">create_at</th>
-                            <th class="text-center">edit_at</th>
-                            <th class="text-center">author</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-center">Action</th>
-                        </tr>
-                    </thead>
+            <thead class="bg-gray-100 rounded-sm">
+                <tr>
+                    <th class="text-center">title</th>
+                    <th class="text-center">content</th>
+                    <th class="text-center">author</th>
+                    <th class="text-center">category</th>
+                    <th class="text-center">tags</th>
+                    <th class="text-center">user</th>
+                    <th class="text-center">create_at</th>
+                    <th class="text-center">edit_at</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
 
-                    <tbody class=" bg-white ">
-                        <tr>
-                            <td>Rabiul Islam</td>
-                            <td>rir.cse.71@gmail.com</td>
-                            <td>cse</td>
-                            <td>2023-11-29 15:28:45</td>
-                            <td>2023-11-29 15:28:45</td>
-                            <td>author</td>
-                            <td>
-                                <span class="bg-green-50 text-green-700 px-3 py-1 ring-1 ring-green-200 text-xs rounded-md">Active</span>
-                            </td>
-                            <td>
-                                <div class="flex justify-between gap-1">
-                                    <i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i>
-                                    <i title="View" class="fa-solid fa-eye p-1 text-violet-500 rounded-full cursor-pointer"></i>
-                                    <i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i>
-                                </div>
-                            </td>
+            <tbody id="Articletable" class=" bg-white ">
 
-                        </tr>
-
-
-                    </tbody>
-                </table>
+            </tbody>
+        </table>
 
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 bg-gray-50 gab-3 border border-gray-100 rounded-lg mb-2">

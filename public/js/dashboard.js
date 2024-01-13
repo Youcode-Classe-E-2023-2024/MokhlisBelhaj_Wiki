@@ -104,6 +104,7 @@ function getCategory(){
 }
 $(document).ready(function () {
     getCategory();
+  
 });
 // __________________________________________editCategory__________________________________
 $(document).on("click", ".Category-edite", openCategoryEditModal);
@@ -173,6 +174,7 @@ $(document).on('click', '.category-delete-link', function (event) {
                 // Show a success alert
                 alert('category deleted successfully!');
                 getCategory();
+                getArticle()
             },
             error: function (error) {
                 console.log('Error deleting post: ', error);
@@ -254,6 +256,7 @@ $("#addNewTag").on("click", opentagModal);
 // _____________________________getTags________________________
 $(document).ready(function () {
     getTag();
+   
 });
 // __________________________________________editTag__________________________________
 $(document).on("click", ".tag-edite", openTagEditModal);
@@ -328,20 +331,79 @@ $(document).on('click', '.tag-delete-link', function (event) {
         });
     }
 });
+//_______________________________________getarticles___________________________________
 
-// ---------------------users --------------------
-// $(document).ready(function(){
-//     $.ajax({
-//         url: 'http://localhost/MokhlisBelhaj_Wiki/admin/allUsers/',
-//         type: 'GET',
-//         dataType: 'json', // Change this based on the expected response type
-//         success: function(data) {
-//             // Handle the successful response here
-//             console.log(data);
-//         },
-//         error: function(error) {
-//             // Handle any errors that occur during the request
-//             console.error('Error fetching data:', error);
-//         }
-//     });
-// });
+function getArticle(){
+    $.ajax({
+        url: 'http://localhost/MokhlisBelhaj_Wiki/admin/allarticle',
+        type: 'GET',
+        dataType: 'json', // Change this based on the expected response type
+        success: function (data) {
+            var tbody = $('#Articletable');
+            console.log(data);
+
+
+            // Clear existing content
+            tbody.empty();
+
+            // Iterate through the data and append rows to the tbody
+            $.each(data, function (index, item) {
+                var row = '<tr>';
+                row += '<td>' + item.title + '</td>';
+                row+='<td class="p-4 border-b border-blue-gray-50">'
+                row+='<div class="flex items-center gap-3">'
+                row+='  <img src="http://localhost/MokhlisBelhaj_Wiki/img/'+item.imageName+'" alt="Spotify" class="inline-block relative object-center !rounded-full w-12 h-12 rounded-lg border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1">'
+                row+='</div>'
+              row+='</td>'
+                row += '<td>' + item.content + '</td>';
+                row += '<td>' + item.id_user + '</td>';
+                row += '<td>' + item.id_category + '</td>';
+                row += '<td>' + item.id_category + '</td>';
+                row += '<td>' + item.create_at + '</td>';
+                row += '<td>' + item.edit_at + '</td>';
+                row += '<td>' + item.status + '</td>';
+                row += '<td>';
+                row += '<div class="flex justify-evenly gap-1">';
+                row += '<button class="Article-edite text-blue-500 hover:text-blue-600"><input type="hidden" value="' + item.id + '" class="editeArticle"><i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i></button>';
+                row += ' <button class="Article-delete-link text-red-500 hover:text-red-600"><input type="hidden" value="' + item.id + '" class="inputDelete"><i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i></button>';
+                row += '</div>';
+                row += '</td>';
+                row += '</tr>';
+                tbody.append(row);
+            });
+        },
+        error: function (error) {
+            // Handle any errors that occur during the request
+            console.error('Error fetching data:', error);
+        }
+    });
+}
+$(document).ready(function () {
+    getArticle();
+   
+});
+$(document).on('click', '.Article-delete-link', function (event) {
+    event.preventDefault(); // Prevent the default behavior of the link
+console.log( $('.inputDelete', $(this).parent()).val());
+    var deleteUrl = "http://localhost/MokhlisBelhaj_Wiki/admin/archiveArticle/" + $('.inputDelete', $(this).parent()).val();
+
+   
+
+    // Confirm with the user before sending the delete request
+    if (confirm('Are you sure you want to delete this Wiki?')) {
+        $.ajax({
+            url: deleteUrl,
+            method: 'put', // Adjust the HTTP method based on your API requirements
+            success: function (response) {
+console.log(response); //
+                // Show a success alert
+                getArticle();
+                alert('Wiki deleted successfully!');
+            },
+            error: function (error) {
+                console.log('Error deleting post: ', error);
+            }
+        });
+    }
+});
+

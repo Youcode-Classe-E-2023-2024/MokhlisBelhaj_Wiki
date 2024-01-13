@@ -187,4 +187,30 @@ console.error(xhr.responseText);
 }
 });
 });
+// ___________________delete wiki________________
+$(document).on('click', '.Article-delete-link', function (event) {
+    event.preventDefault(); // Prevent the default behavior of the link
+console.log( $('.inputDelete', $(this).parent()).val());
+    var deleteUrl = "http://localhost/MokhlisBelhaj_Wiki/author/deleteArticle/" + $('.inputDelete', $(this).parent()).val();
+
+   
+
+    // Confirm with the user before sending the delete request
+    if (confirm('Are you sure you want to delete this Wiki?')) {
+        $.ajax({
+            url: deleteUrl,
+            method: 'DELETE', // Adjust the HTTP method based on your API requirements
+            success: function () {
+                $(event.target).closest('tr').remove();
+
+                // Show a success alert
+                getArticle();
+                alert('Wiki deleted successfully!');
+            },
+            error: function (error) {
+                console.log('Error deleting post: ', error);
+            }
+        });
+    }
+});
 
