@@ -46,7 +46,7 @@
 
                 <ul class="flex flex-col gap-1 mt-2">
                     <li class="text-gray-500 hover:bg-red-400 hover:text-gray-900">
-                        <a class="w-full flex items-center py-3" href="#">
+                        <a class="w-full flex items-center py-3" href="http://localhost/MokhlisBelhaj_Wiki/Authentication/logout">
                             <i class="fa-solid fa-right-from-bracket text-center px-5"></i>
                             <span class="pl-1">Logout</span>
                         </a>

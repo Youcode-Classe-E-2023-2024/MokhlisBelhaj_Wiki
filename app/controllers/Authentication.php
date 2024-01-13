@@ -78,7 +78,7 @@ class Authentication extends Controller{
         $_SESSION['role'] = 'admin';
         $_SESSION['url'] = 'admin/index';
         }else{
-            $_SESSION['role'] = 'auteurs';  
+            $_SESSION['role'] = 'author';  
             $_SESSION['url'] = '';
         }
        

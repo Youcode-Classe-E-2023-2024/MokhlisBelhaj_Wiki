@@ -6,9 +6,9 @@ class Admin extends Controller
     private $Usermodel;
     public function __construct()
     {
-        // if($_SESSION['role'] != 'admin'){
-        //     redirect('404');
-        // }
+        if($_SESSION['role'] != 'admin'){
+            redirect('404');
+        }
         $this->tagmodel = $this->model('Tag');
         $this->Categorymodel = $this->model('Category');
         $this->Usermodel = $this->model('User');
