@@ -122,18 +122,71 @@ class Article
     }
     public function getArticleByTitle($data)
     {
-        $this->db->query("SELECT * FROM `article` WHERE title LIKE '%:title%';");
-        $this->db->bind(':title', $data['title']);
+        $this->db->query("SELECT 
+            a.`id`, a.`imageName`, a.`title`, a.`content`, a.`create_at`, a.`edit_at`,
+            u.`name` AS 'user_name', c.`name` AS 'category_name',
+            GROUP_CONCAT(t.`name` ORDER BY t.`name` ASC) AS 'tag_names'
+        FROM 
+            `article` AS a
+        JOIN 
+            `user` AS u ON a.`id_user` = u.`userId`
+        JOIN 
+            `category` AS c ON a.`id_category` = c.`idCategory`
+        LEFT JOIN 
+            `articles_tags` AS at ON a.`id` = at.`id_article`
+        LEFT JOIN 
+            `tag` AS t ON at.`id_tag` = t.`idtag`
+        WHERE 
+            a.`title` LIKE :title AND a.`status` = 'published'");
+
+        // Assuming $data['value'] contains the value you want to search for in the title
+        $titleValue = '%' . $data['value'] . '%';
+        $this->db->bind(':title', $titleValue);
         $result = $this->db->resultSet();
+
         return $result;
     }
     public function getArticleBycategory($data)
     {
         $this->db->query("SELECT 
-        article.*, Category.name AS category_name FROM article JOIN Category ON article.id_category = Category.idCategory WHERE Category.name LIKE '%:categoryName%';");
+        a.`id`, a.`imageName`, a.`title`, a.`content`, a.`create_at`, a.`edit_at`,
+        u.`name` AS 'user_name', c.`name` AS 'category_name',
+        GROUP_CONCAT(t.`name` ORDER BY t.`name` ASC) AS 'tag_names'
+    FROM 
+        `article` AS a
+    JOIN 
+        `user` AS u ON a.`id_user` = u.`userId`
+    JOIN 
+        `category` AS c ON a.`id_category` = c.`idCategory`
+    LEFT JOIN 
+        `articles_tags` AS at ON a.`id` = at.`id_article`
+    LEFT JOIN 
+        `tag` AS t ON at.`id_tag` = t.`idtag`
+    WHERE 
+        c.`name` LIKE :categoryName AND a.`status` = 'published'
+    GROUP BY 
+        a.`id`;");
+        $categoryName = '%' . $data['value'] . '%';
+        $this->db->bind(':categoryName', $categoryName);
         $result = $this->db->resultSet();
-        $this->db->bind(':categoryName', $data['categoryName']);
-
+        return $result;
+    }
+    public function getArticleByTag($data)
+    {
+        $this->db->query("SELECT a.`id`, a.`imageName`, a.`title`, a.`content`, a.`create_at`, a.`edit_at`,
+         u.`name` AS 'user_name',
+         c.`name` AS 'category_name',
+          GROUP_CONCAT(t.`name` ORDER BY t.`name` ASC) AS 'tag_names' FROM `article`
+           AS a JOIN `user` AS u ON a.`id_user` = u.`userId` 
+           JOIN `category` AS c ON a.`id_category` = c.`idCategory` 
+           LEFT JOIN `articles_tags` AS at ON a.`id` = at.`id_article` 
+           LEFT JOIN `tag` AS t ON at.`id_tag` = t.`idtag`
+            WHERE t.`name` LIKE :TagName AND a.`status` = 'published' 
+            GROUP BY a.`id`;
+        ");
+        $TagName = '%' . $data['value'] . '%';
+        $this->db->bind(':TagName', $TagName);
+        $result = $this->db->resultSet();
         return $result;
     }
 
