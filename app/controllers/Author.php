@@ -41,6 +41,10 @@ class author extends Controller
     public function addArticle()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!isset($_POST['selected_tags'])){
+                $_POST['selected_tags']= "";
+            }
+            
 
             $data = [
                 "image" => $_FILES["image"],
@@ -52,19 +56,28 @@ class author extends Controller
                 "title_err" => "",
                 "tags_err" => "",
             ];
+            $error =[
+                "image_err" => "",
+                "title_err" => "",
+                "content_err" => "",
+                "tags_err" => "",
+            ];
 
 
-            if (empty($data['image'])) {
-                $data["image_err"] = "choose your image ";
+            if (empty($_FILES['image']['name'])) {
+                $error["image_err"] = "choose your image ";
             }
             if (empty($data['title'])) {
-                $data["title_err"] = "title required";
+                $error["title_err"] = "title required";
+            }
+            if (empty($data['content'])) {
+                $error["content_err"] = "content required";
             }
             if (empty($data['tags'])) {
-                $data["tags_err"] = "Please select at least one tag. ";
+                $error["tags_err"] = "Please select at least one tag. ";
             }
 
-            if (empty($data['image_err']) && empty($data['title_err']) && empty($data['tags_err'])) {
+            if (empty($error['image_err']) && empty($error['title_err']) && empty($error['tags_err'] && empty($error['content']))) {
                 // Check if the file is uploaded successfully and has the expected type
                 if (!empty($_FILES['image']['name'])) {
                     $file_name = $_FILES['image']['name'];
@@ -95,19 +108,31 @@ class author extends Controller
 
                                 $this->Articlemodel->insertTagArticle($dataToInsert);
                             };
-
-                            redirect('author/index');
+                            http_response_code(200);
+                            echo json_encode('success');
+                            // redirect('author/index');
                         }
                         }else {
-                            die('Error file not completed');
+                            http_response_code(400);
+
+                            echo json_encode('Error file not completed');
                         }
                     } else {
                         // Handle the case where the file upload failed
-                        die('File upload failed');
+                        
+                            $error["image_err"] = "choose your image ";
+                        
                     }
+                }else{
+                    http_response_code(400);
+                    header('Content-Type: application/json');
+
+                    
+                    echo (json_encode($error));
+
                 }
             }
-            debug($data);
+           
 
         } 
         public function deleteArticle($id){

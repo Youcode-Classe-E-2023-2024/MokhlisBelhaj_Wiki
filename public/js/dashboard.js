@@ -74,6 +74,10 @@ function getCategory(){
         type: 'GET',
         dataType: 'json', // Change this based on the expected response type
         success: function (data) {
+            $("#Categorylength").empty();
+            
+            console.log($("#Categorylength"));
+            $("#Categorylength").append(data.length);
             var tbody = $('#Categorytable');
 
 
@@ -122,6 +126,7 @@ function openCategoryEditModal() {
             console.log(data);
             $('#nameupdateCategory').val(data[0].name);
             $('#editeCategoryrid').val(data[0].idCategory);
+            
         },
         error: function (error) {
             console.log('Error fetching data: ', error);
@@ -224,6 +229,9 @@ function getTag() {
         dataType: 'json', // Change this based on the expected response type
         success: function (data) {
             console.log(data);
+            $("#Taglength").empty();
+
+            $('#Taglength').append(data.length);
 
             // Handle the successful response here
             var tbody = $('#tagtable');
@@ -296,8 +304,8 @@ function editeTag() {
         },
 
         success: function (data) {
-            alert(' updated tag successfully');
             getTag();
+            alert(' updated tag successfully');
             $('#editTagModal').addClass('hidden');
         },
         error: function (error) {
@@ -341,10 +349,17 @@ function getArticle(){
         success: function (data) {
             var tbody = $('#Articletable');
             console.log(data);
+            length = data.length;
+
+            $('#Articlelength').empty();
+            $('#Articlelength').append(length)
 
 
             // Clear existing content
             tbody.empty();
+            
+            console.log(length);
+
 
             // Iterate through the data and append rows to the tbody
             $.each(data, function (index, item) {
@@ -364,8 +379,9 @@ function getArticle(){
                 row += '<td>' + item.status + '</td>';
                 row += '<td>';
                 row += '<div class="flex justify-evenly gap-1">';
-                row += '<button class="Article-edite text-blue-500 hover:text-blue-600"><input type="hidden" value="' + item.id + '" class="editeArticle"><i title="Edit" class="fa-solid fa-pencil p-1 text-green-500 rounded-full cursor-pointer"></i></button>';
-                row += ' <button class="Article-delete-link text-red-500 hover:text-red-600"><input type="hidden" value="' + item.id + '" class="inputDelete"><i title="Delete" class="fa-solid fa-trash p-1 text-red-500 rounded-full cursor-pointer"></i></button>';
+                if(item.status === 'published'){
+                row += ' <button class="Article-delete-link text-blue-500 hover:text-blue-600"><input type="hidden" value="' + item.id + '" class="inputDelete"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m6 4.125 2.25 2.25m0 0 2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" /></svg></button>';
+                }
                 row += '</div>';
                 row += '</td>';
                 row += '</tr>';
@@ -380,6 +396,7 @@ function getArticle(){
 }
 $(document).ready(function () {
     getArticle();
+    getUsers();
    
 });
 $(document).on('click', '.Article-delete-link', function (event) {
@@ -406,4 +423,21 @@ console.log(response); //
         });
     }
 });
+// ________________________________getCountUsers__________________________________________
+function getUsers(){
+    $.ajax({
+        url: 'http://localhost/MokhlisBelhaj_Wiki/admin/allUsers',
+        method: 'post',
+        success: function (response) {
+            data = JSON.parse(response);
+            $('#Userslength').empty();
+            $('#Userslength').append(data.length);
+        },
+        error: function (error){
+            console.log('Error deleting post: ', error);
+
+        }
+
+});
+}
 

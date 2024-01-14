@@ -1,59 +1,5 @@
-<?php require APPROOT . '\views\include\header.php'; ?>
+<?php require APPROOT . '\views\include\sidebar.php'; ?>
 
-
-<body class="h-screen">
-
-    <header class="h-14 bg-gray-100 top-0 w-full fixed shadow" style="z-index: 99999;">
-        <div class="flex justify-between items-center px-10 h-14">
-            <div class="flex justify-between items-center gap-x-14">
-                <div class="w-40">
-                    <h2 class="text-md font-bold" href="#"> <?php echo $_SESSION['name'] ?>
-                    </h2>
-                    <p class="text-gray-400 text-[12px]">
-                        <?php echo $_SESSION['role'] ?>
-                    </p>
-                </div>
-
-                <a id="toggle-button" class="hidden lg:block bg-gray-200 rounded-full transition-all duration-500 ease-in-out" onclick="collapseSidebar()" href="#"><i class="fa-solid fa-arrow-left p-3"></i></a>
-            </div>
-
-
-        </div>
-    </header>
-
-    <!-- main content -->
-    <main class="h-[calc(100vh-120px)] w-full absolute top-14">
-        <!-- left sidebar -->
-        <aside id="sidebar" class="w-[60px] lg:w-[240px] h-[calc(100vh-120px)] whitespace-nowrap fixed shadow overflow-x-hidden transition-all duration-500 ease-in-out">
-            <div class="flex flex-col justify-between h-full">
-                <ul class="flex flex-col gap-1 mt-2">
-                    <li class="text-gray-500 hover:bg-gray-100 hover:text-gray-900">
-                        <a class="w-full flex items-center py-3" href="<?php echo URLROOT; ?>/">
-                            <i class="fa-solid fa-house text-center px-5"></i>
-                            <span class="whitespace-nowrap pl-1">HOME</span>
-                        </a>
-                    </li>
-
-                    <li class="text-gray-500 hover:bg-gray-100 hover:text-gray-900">
-                        <a class="w-full flex items-center py-3" href="#">
-                            <i class="fa-solid fa-chart-line text-center px-5"></i>
-                            <span class="whitespace-nowrap pl-1">Dashboard</span>
-                        </a>
-                    </li>
-
-
-                </ul>
-
-                <ul class="flex flex-col gap-1 mt-2">
-                    <li class="text-gray-500 hover:bg-red-400 hover:text-gray-900">
-                        <a class="w-full flex items-center py-3" href="http://localhost/MokhlisBelhaj_Wiki/Authentication/logout">
-                            <i class="fa-solid fa-right-from-bracket text-center px-5"></i>
-                            <span class="pl-1">Logout</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </aside>
 
         <!-- main content -->
         <section id="content" class="w-[100wh-60px] lg:w-[100wh-250px] ml-[60px] lg:ml-[240px] p-5 right-0 transition-all duration-500 ease-in-out">
@@ -61,32 +7,32 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                 <div class="bg-slate-50 p-5 m-2 rounded-md flex justify-between items-center shadow">
                     <div>
-                        <h3 class="font-bold">Total Users</h3>
-                        <p class="text-gray-500">100</p>
+                        <h3 class="font-bold">Total Article</h3>
+                        <p id="Articlelength" class="text-gray-500"></p>
                     </div>
                     <i class="fa-solid fa-users p-4 bg-gray-200 rounded-md"></i>
                 </div>
 
                 <div class="bg-slate-50 p-5 m-2 flex justify-between items-center shadow">
                     <div>
-                        <h3 class="font-bold">Total Active Users</h3>
-                        <p class="text-gray-500">65</p>
+                        <h3 class="font-bold">Total  Users</h3>
+                        <p id="Userslength" class="text-gray-500"></p>
                     </div>
                     <i class="fa-solid fa-users p-4 bg-green-200 rounded-md"></i>
                 </div>
 
                 <div class="bg-slate-50 p-5 m-2 flex justify-between items-center shadow">
                     <div>
-                        <h3 class="font-bold">Total In Active Users</h3>
-                        <p class="text-gray-500">30</p>
+                        <h3 class="font-bold">Total  Category</h3>
+                        <p id="Categorylength" class="text-gray-500"></p>
                     </div>
                     <i class="fa-solid fa-users p-4 bg-yellow-200 rounded-md"></i>
                 </div>
 
                 <div class="bg-slate-50 p-5 m-2 flex justify-between items-center shadow">
                     <div>
-                        <h3 class="font-bold">Deleted Users</h3>
-                        <p class="text-gray-500">5</p>
+                        <h3 class="font-bold">Total Tag</h3>
+                        <p id="Taglength" class="text-gray-500"></p>
                     </div>
                     <i class="fa-solid fa-users p-4 bg-red-200 rounded-md"></i>
                 </div>
@@ -120,7 +66,8 @@
         </table>
 
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4 bg-gray-50 gab-3 border border-gray-100 rounded-lg mb-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 p-4  overflow-x-auto bg-gray-50 gab-3 border border-gray-100 rounded-lg mb-2">
+          
                 <table class="w-full text-center">
                     <thead class="bg-gray-100 rounded-sm">
                         <tr>
@@ -280,7 +227,7 @@
 
 
             <div class="flex justify-end">
-                <button class="bg-gradient-to-r from-violet-300 to-indigo-300 hover:from-violet-900 hover:to-indigo-900 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md mr-2" onclick="editeTag()">Create</button>
+                <button class="bg-gradient-to-r from-violet-300 to-indigo-300 hover:from-violet-900 hover:to-indigo-900 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md mr-2" onclick="editeTag()">update</button>
                 <button class="bg-gradient-to-r from-gray-100 to-slate-200 hover:from-gray-200 hover:to-slate-300 border border-fuchsia-00 hover:border-violet-100 text-gray-800 font-semibold py-2 px-4 rounded-md transition-colors duration-300" onclick="closeTagEditeModal()">Cancel</button>
             </div>
         </div>
@@ -310,7 +257,7 @@
 
 
             <div class="flex justify-end">
-                <button class="bg-gradient-to-r from-violet-300 to-indigo-300 hover:from-violet-900 hover:to-indigo-900 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md mr-2" onclick="editeCategory()">Create</button>
+                <button class="bg-gradient-to-r from-violet-300 to-indigo-300 hover:from-violet-900 hover:to-indigo-900 border border-fuchsia-00 hover:border-violet-100 text-white font-semibold py-2 px-4 rounded-md mr-2" onclick="editeCategory()">update</button>
                 <button class="bg-gradient-to-r from-gray-100 to-slate-200 hover:from-gray-200 hover:to-slate-300 border border-fuchsia-00 hover:border-violet-100 text-gray-800 font-semibold py-2 px-4 rounded-md transition-colors duration-300" onclick="closeCategoryEditeModal()">Cancel</button>
             </div>
         </div>

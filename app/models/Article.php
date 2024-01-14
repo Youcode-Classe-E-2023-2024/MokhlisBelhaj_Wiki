@@ -39,8 +39,8 @@ class Article
 
         // Execute the table creation query
         $this->db->query($createTableSQL);
-        $result =$this->db->execute();
-        if ($result){
+        $result = $this->db->execute();
+        if ($result) {
             $createTableSQL = "
             CREATE TABLE `articles_tags` (
                 `id_article` int NOT NULL,
@@ -51,17 +51,66 @@ class Article
                 CONSTRAINT `FK_tags` FOREIGN KEY (`id_tag`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
             ); 
             ";
-    
+
             // Execute the table creation query
             $this->db->query($createTableSQL);
             $this->db->execute();
         }
-
     }
+    public function articlehome()
+    {
+        $this->db->query("SELECT 
+                    a.`id`,a.`imageName`, a.`title`, a.`content`, a.`create_at`, a.`edit_at`,
+                     u.`name` AS 'user_name', 
+                     c.`name` AS 'category_name',
+                    GROUP_CONCAT(t.`name` ORDER BY t.`name` ASC) AS 'tag_names' FROM `article` AS a
+                    JOIN `user` AS u ON a.`id_user` = u.`userId`
+                    JOIN `category` AS c ON a.`id_category` = c.`idCategory`
+                    LEFT JOIN `articles_tags` AS at ON a.`id` = at.`id_article`
+                    LEFT JOIN `tag` AS t ON at.`id_tag` = t.`idtag`WHERE a.`status` = 'published' 
+                    GROUP BY a.`id`ORDER BY a.`create_at` DESC; ");
+        $result = $this->db->resultSet();
+        return $result;
+    }
+    public function articlehomebyId($id)
+    {
+        $this->db->query("SELECT 
+                    a.`id`, a.`imageName`, a.`title`, a.`content`, a.`create_at`, a.`edit_at`,
+                    u.`name` AS 'user_name', c.`name` AS 'category_name',
+                    GROUP_CONCAT(t.`name` ORDER BY t.`name` ASC) AS 'tag_names'
+                FROM 
+                    `article` AS a
+                JOIN 
+                    `user` AS u ON a.`id_user` = u.`userId`
+                JOIN 
+                    `category` AS c ON a.`id_category` = c.`idCategory`
+                LEFT JOIN 
+                    `articles_tags` AS at ON a.`id` = at.`id_article`
+                LEFT JOIN 
+                    `tag` AS t ON at.`id_tag` = t.`idtag`
+                WHERE 
+                     a.`id` =:id");
+        $this->db->bind(':id', $id);
+        $result = $this->db->resultSet();
+        return $result;
+    }
+
+
+
+
     public function getAllArticle()
     {
-        $this->db->query("SELECT * FROM `$this->tableName` where status='published' and id_user=:id  ");
-        $this->db->bind(':id',$_SESSION['user_id']);
+        $this->db->query("SELECT 
+        a.`id`,a.`imageName`, a.`title`, a.`content`, a.`create_at`, a.`edit_at`,a.`status`,
+         u.`name` AS 'user_name', 
+         c.`name` AS 'category_name',
+        GROUP_CONCAT(t.`name` ORDER BY t.`name` ASC) AS 'tag_names' FROM `article` AS a
+        JOIN `user` AS u ON a.`id_user` = u.`userId`
+        JOIN `category` AS c ON a.`id_category` = c.`idCategory`
+        LEFT JOIN `articles_tags` AS at ON a.`id` = at.`id_article`
+        LEFT JOIN `tag` AS t ON at.`id_tag` = t.`idtag`WHERE a.`status` = 'published' and id_user=:id 
+        GROUP BY a.`id`ORDER BY a.`create_at` DESC;   ");
+        $this->db->bind(':id', $_SESSION['user_id']);
         $result = $this->db->resultSet();
         return $result;
     }
@@ -90,7 +139,7 @@ class Article
 
     public function insertarticle($data)
     {
-       
+
         $this->db->query("INSERT INTO $this->tableName ( `imageName`,`title`,`content`,`status`,`id_user`,`id_category`) VALUES (:imageName,:title,:content,:status,:id_user,:id_category)");
         $this->db->bind(':imageName', $data['image']);
         $this->db->bind(':title', $data['title']);
@@ -101,21 +150,21 @@ class Article
         if ($this->db->execute()) {
             $lastInsertedId = $this->db->lastInsertId();
             return $lastInsertedId;
-        } else {    
+        } else {
 
             return false;
         }
-       
     }
-    public function insertTagArticle($data){
+    public function insertTagArticle($data)
+    {
         $this->db->query("INSERT INTO `articles_tags` (`id_article`,`id_tag`) VALUES( :id_articles ,:id_tag)");
         $this->db->bind(':id_articles', $data['id_articles']);
-        $this->db->bind(':id_tag', $data['id_tag']); 
-        $this->db->execute();   
+        $this->db->bind(':id_tag', $data['id_tag']);
+        $this->db->execute();
     }
     public function archiveArticle($id)
     {
-      
+
         $this->db->query("UPDATE `$this->tableName` SET `status`='archived' WHERE `id`=:id ");
         $this->db->bind(':id', $id);
         if ($this->db->execute()) {

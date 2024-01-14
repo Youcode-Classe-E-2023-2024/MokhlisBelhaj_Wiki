@@ -32,7 +32,13 @@ class Category {
          $this->db->execute();
     }
     public function getallCategory(){
-        $this->db->query(" SELECT * FROM $this->tableName");       
+        $this->db->query(" SELECT * FROM $this->tableName ORDER BY GREATEST(`create_at`, `edit_at`) DESC");       
+        $result = $this->db->resultSet();
+        return $result;
+    }	
+
+    public function getallCategoryhome(){
+        $this->db->query(" SELECT * FROM $this->tableName ORDER BY GREATEST(`create_at`, `edit_at`) DESC LIMIT 3 ");       
         $result = $this->db->resultSet();
         return $result;
     }
